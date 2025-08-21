@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #f87171, #ec4899, #8b5cf6);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .drop-shadow-lg {
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+
+        /* Basic transition for pages */
+        .page-transition {
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            transform-origin: center;
+        }
+        .page-hidden {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        .page-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Specific animations for page entry */
+        .page-enter {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        .page-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 0.5s ease-in-out, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .page-exit {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .page-exit-active {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app" class="w-full h-full flex items-center justify-center p-4">
+    <!-- Content will be rendered here by JavaScript -->
+</div>
+
+<script>
+    // Constants for messages and photos
+    const messages = [
+        "Hi Gaurish, even though we're far apart, you are always in my heart. Happy Birthday!",
+        "Thinking of all our special moments today. Can't wait to make new ones with you soon. ❤️",
+        "To the one who makes me happy, from miles away and always. Wishing you the best day ever!",
+        "Can't wait to meet you next week and be in your arms this same time next week. The love we share is a forever story. Happy Birthday!",
+        "Sending you the biggest virtual hug and a kiss on your special day. Happy Birthday!"
+    ];
+
+    const photos = [
+        "https://photos.fife.usercontent.google.com/pw/AP1GczMX_7-bc6ANUncZn4roWg4MpaNwSQXFU6Lr-YCzkYmmvy4PHciHJbmimw=w780-h1040-s-no-gm?authuser=0",
+        "https://images.unsplash.com/photo-1587570498718-f2b3858c4c79?q=80&w=1969&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1579222340578-197176a9134a?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "https://images.unsplash.com/photo-1627914434771-8848d7010485?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    ];
+
+    let currentPage = 'landing';
+    let currentMessageIndex = 0;
+    let currentPhotoIndex = 0;
+    let isGiftOpen = false;
+
+    const app = document.getElementById('app');
+
+    // Preload images to avoid flickers
+    photos.forEach(photo => {
+        const img = new Image();
+        img.src = photo;
+    });
+
+    const render = () => {
+        app.innerHTML = '';
+        let contentHtml = '';
+
+        switch (currentPage) {
+            case 'landing':
+                contentHtml = `
+                    <div class="page-transition page-enter flex flex-col items-center justify-center p-8 text-center">
+                        <i class="fas fa-heart text-red-400 text-6xl md:text-8xl drop-shadow-lg animate-pulse"></i>
+                        <h1 class="text-5xl md:text-7xl font-extrabold text-white my-6 drop-shadow-lg">
+                            Happy Birthday, My Love!
+                        </h1>
+                        <p class="text-xl md:text-2xl text-white font-medium mb-8 drop-shadow-md">
+                            A little digital celebration for you, from across the miles.
+                        </p>
+                        <button onclick="changePage('main')" class="px-8 py-4 text-xl font-bold text-red-500 bg-white rounded-full shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 active:scale-95">
+                            Start the Celebration
+                        </button>
+                    </div>
+                `;
+                break;
+
+            case 'main':
+                contentHtml = `
+                    <div class="page-transition page-enter grid grid-cols-1 md:grid-cols-2 gap-8 p-4 md:p-8 w-full max-w-4xl">
+                        <div onclick="changePage('messages')" class="card">
+                            <i class="fa-solid fa-message text-blue-300 text-4xl md:text-5xl drop-shadow-md"></i>
+                            <h3 class="text-xl font-bold text-white text-center">Read a message</h3>
+                        </div>
+                        <div onclick="changePage('photos')" class="card">
+                            <i class="fa-solid fa-image text-yellow-300 text-4xl md:text-5xl drop-shadow-md"></i>
+                            <h3 class="text-xl font-bold text-white text-center">See our memories</h3>
+                        </div>
+                        <div onclick="changePage('gift')" class="card">
+                            <i class="fa-solid fa-gift text-purple-300 text-4xl md:text-5xl drop-shadow-md"></i>
+                            <h3 class="text-xl font-bold text-white text-center">Open your gift</h3>
+                        </div>
+                        <div onclick="changePage('landing')" class="card">
+                            <i class="fa-solid fa-star text-white text-4xl md:text-5xl drop-shadow-md"></i>
+                            <h3 class="text-xl font-bold text-white text-center">Go back to the start</h3>
+                        </div>
+                    </div>
+                `;
+                break;
+
+            case 'messages':
+                contentHtml = `
+                    <div class="page-transition page-enter flex flex-col items-center justify-center w-full max-w-lg p-6 space-y-6">
+                        <h2 class="text-3xl font-bold text-white drop-shadow-md text-center">A Message For You</h2>
+                        <div class="card !cursor-default">
+                            <p id="message-text" class="text-lg text-white font-medium text-center leading-relaxed mt-4">
+                                ${messages[currentMessageIndex]}
+                            </p>
+                            <div class="flex justify-center mt-6 space-x-4">
+                                <button onclick="nextMessage(-1)" class="icon-button"><i class="fas fa-chevron-left"></i></button>
+                                <button onclick="nextMessage(1)" class="icon-button"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                        <button onclick="changePage('main')" class="mt-4 px-6 py-3 text-lg font-semibold text-white bg-red-500 rounded-full shadow-lg hover:bg-red-600 transition-colors">
+                            Back
+                        </button>
+                    </div>
+                `;
+                break;
+
+            case 'photos':
+                contentHtml = `
+                    <div class="page-transition page-enter flex flex-col items-center justify-center w-full max-w-2xl p-6 space-y-6">
+                        <h2 class="text-3xl font-bold text-white drop-shadow-md text-center">Our Memories</h2>
+                        <div class="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white border-opacity-50">
+                            <img id="photo-img" src="${photos[currentPhotoIndex]}"
+                                onerror="this.src='https://placehold.co/1280x720/6b7280/ffffff?text=Photo+Unavailable'"
+                                alt="Memory"
+                                class="w-full h-full object-cover photo-transition"
+                            />
+                            <div class="absolute inset-y-0 flex items-center justify-between w-full p-4">
+                                <button onclick="nextPhoto(-1)" class="icon-button"><i class="fas fa-chevron-left"></i></button>
+                                <button onclick="nextPhoto(1)" class="icon-button"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                        <button onclick="changePage('main')" class="mt-4 px-6 py-3 text-lg font-semibold text-white bg-red-500 rounded-full shadow-lg hover:bg-red-600 transition-colors">
+                            Back
+                        </button>
+                    </div>
+                `;
+                break;
+
+            case 'gift':
+                contentHtml = `
+                    <div class="page-transition page-enter flex flex-col items-center justify-center w-full max-w-lg p-6 space-y-6">
+                        <h2 class="text-3xl font-bold text-white drop-shadow-md text-center">Your Gift</h2>
+                        <div id="gift-box" class="relative w-64 h-64 cursor-pointer" onclick="toggleGift()">
+                            ${isGiftOpen ? `
+                                <div class="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-30 rounded-3xl shadow-xl border border-white border-opacity-30 p-4">
+                                    <i class="fa-solid fa-star text-yellow-300 text-5xl drop-shadow-md"></i>
+                                    <p class="text-white text-xl font-bold text-center mt-4">
+                                        The best gift is you! Can't wait to see you soon. ❤️
+                                    </p>
+                                </div>
+                            ` : `
+                                <div class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-30 rounded-3xl shadow-xl border border-white border-opacity-30">
+                                    <i class="fa-solid fa-gift text-purple-300 text-6xl drop-shadow-md animate-pulse"></i>
+                                    <span class="absolute bottom-6 text-white text-lg font-semibold">Tap to Open!</span>
+                                </div>
+                            `}
+                        </div>
+                        <button onclick="changePage('main')" class="mt-4 px-6 py-3 text-lg font-semibold text-white bg-red-500 rounded-full shadow-lg hover:bg-red-600 transition-colors">
+                            Back
+                        </button>
+                    </div>
+                `;
+                break;
+        }
+
+        app.innerHTML = contentHtml;
+        // Wait a tick for the DOM to update, then apply the active class
+        setTimeout(() => {
+            const page = app.querySelector('.page-enter');
+            if (page) {
+                page.classList.remove('page-enter');
+                page.classList.add('page-enter-active');
+            }
+        }, 10);
+    };
+
+    const changePage = (newPage) => {
+        const page = app.querySelector('.page-transition');
+        if (page) {
+            page.classList.remove('page-enter-active');
+            page.classList.add('page-exit-active');
+            page.addEventListener('transitionend', () => {
+                currentPage = newPage;
+                render();
+            }, { once: true });
+        } else {
+            currentPage = newPage;
+            render();
+        }
+    };
+
+    const nextMessage = (direction) => {
+        const newMessageIndex = (currentMessageIndex + direction + messages.length) % messages.length;
+        const messageEl = document.getElementById('message-text');
+        messageEl.style.opacity = '0';
+        setTimeout(() => {
+            currentMessageIndex = newMessageIndex;
+            messageEl.innerText = messages[currentMessageIndex];
+            messageEl.style.opacity = '1';
+        }, 300);
+    };
+
+    const nextPhoto = (direction) => {
+        const newPhotoIndex = (currentPhotoIndex + direction + photos.length) % photos.length;
+        const photoEl = document.getElementById('photo-img');
+        photoEl.classList.add('page-exit');
+        photoEl.style.opacity = '0';
+        setTimeout(() => {
+            currentPhotoIndex = newPhotoIndex;
+            photoEl.src = photos[currentPhotoIndex];
+            photoEl.classList.remove('page-exit');
+            photoEl.style.opacity = '1';
+        }, 300);
+    };
+
+    const toggleGift = () => {
+        isGiftOpen = !isGiftOpen;
+        render();
+    };
+
+    document.addEventListener('DOMContentLoaded', render);
+</script>
+
+<style>
+    .card {
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(8px);
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+        transform: scale(1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        min-height: 10rem;
+    }
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 20px 25px rgba(0, 0, 0, 0.2), 0 8px 10px rgba(0, 0, 0, 0.08);
+    }
+    .icon-button {
+        padding: 0.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 9999px;
+        color: white;
+        transition: background-color 0.3s;
+    }
+    .icon-button:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+</style>
+
+</body>
+</html>
